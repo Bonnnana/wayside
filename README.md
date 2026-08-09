@@ -9,3 +9,12 @@ like, and they become stops on a live route that keeps your arrival time honest.
 
 The idea is that the detour is the point. Navigation apps optimise for arriving; Wayside
 optimises for the drive being worth it.
+
+## Repository
+
+```
+mobile/     Android app — Kotlin, Jetpack Compose
+backend/    API — place data, route suggestions, AI summaries
+```
+
+Each folder is its own project.

@@ -1,48 +1,61 @@
-# Built application files
-*.apk
-*.aar
-*.ap_
-*.aab
-*.dex
+# Patterns without a leading slash match at any depth, so these cover
+# both mobile/ and backend/ without needing to be repeated per folder.
 
-# Java / Kotlin class files
-*.class
-
-# Generated files
-bin/
-gen/
-out/
-release/
-
-# Gradle
-.gradle/
-build/
-*.iml
-.kotlin/
-
-# Local configuration (SDK paths, machine-specific settings)
-local.properties
-
-# Android Studio / IntelliJ
-.idea/
-captures/
-.navigation/
-
-# Native builds
-.externalNativeBuild/
-.cxx/
-
-# Proguard / R8
-proguard/
-
-# Log and temp files
-*.log
-*.hprof
-.DS_Store
-
-# Keystores and signing secrets 
+# ---------- Secrets — never commit ----------
 *.jks
 *.keystore
 keystore.properties
 signing.properties
 google-services.json
+secrets.properties
+apikey.properties
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+appsettings.Local.json
+
+# ---------- Local / machine-specific config ----------
+local.properties
+
+# ---------- Android & Gradle ----------
+.gradle/
+build/
+*.iml
+.kotlin/
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+captures/
+.navigation/
+.externalNativeBuild/
+.cxx/
+proguard/
+
+# ---------- Backend (.NET) ----------
+[Dd]ebug/
+[Rr]elease/
+[Oo]bj/
+[Bb]in/
+*.user
+*.suo
+.vs/
+
+# ---------- Node (if any tooling lands) ----------
+node_modules/
+
+# ---------- IDEs ----------
+.idea/
+.vscode/
+
+# ---------- Logs & OS noise ----------
+*.log
+*.hprof
+.DS_Store
