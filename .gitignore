@@ -1,0 +1,48 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+
+# Java / Kotlin class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+release/
+
+# Gradle
+.gradle/
+build/
+*.iml
+.kotlin/
+
+# Local configuration (SDK paths, machine-specific settings)
+local.properties
+
+# Android Studio / IntelliJ
+.idea/
+captures/
+.navigation/
+
+# Native builds
+.externalNativeBuild/
+.cxx/
+
+# Proguard / R8
+proguard/
+
+# Log and temp files
+*.log
+*.hprof
+.DS_Store
+
+# Keystores and signing secrets 
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+google-services.json
