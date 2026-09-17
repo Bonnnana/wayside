@@ -39,6 +39,11 @@ captures/
 .cxx/
 proguard/
 
+# ---------- Local databases ----------
+*.db
+*.db-shm
+*.db-wal
+
 # ---------- Backend (.NET) ----------
 [Dd]ebug/
 [Rr]elease/
@@ -50,6 +55,12 @@ proguard/
 
 # ---------- Node (if any tooling lands) ----------
 node_modules/
+
+# ---------- Local-only library source ----------
+# A working copy of the infrastructure library, kept here so it can be edited without
+# touching the shared one at ~/Projects/InfrastructureLibrary that Ginga also uses.
+# Publish it with:  cd mobile/InfrastructureLibrary && ./gradlew publishToMavenLocal
+mobile/InfrastructureLibrary/
 
 # ---------- IDEs ----------
 .idea/

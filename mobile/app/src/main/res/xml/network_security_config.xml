@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      Cleartext is permitted only for 10.0.2.2 — the host machine as seen from the Android
+      emulator — so a local development server can be reached without a certificate. Everything
+      else still requires HTTPS, unlike a blanket android:usesCleartextTraffic="true".
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">10.0.2.2</domain>
+    </domain-config>
+</network-security-config>

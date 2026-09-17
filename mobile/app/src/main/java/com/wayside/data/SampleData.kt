@@ -1,18 +1,26 @@
 package com.wayside.data
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountBalance
+import androidx.compose.material.icons.rounded.Diamond
+import androidx.compose.material.icons.rounded.Park
+import androidx.compose.material.icons.rounded.Restaurant
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.wayside.ui.theme.CategoryCulture
 import com.wayside.ui.theme.CategoryFood
 import com.wayside.ui.theme.CategoryHiddenGem
 import com.wayside.ui.theme.CategoryNature
 import com.wayside.ui.theme.CategoryViewpoints
 
-enum class PlaceCategory(val label: String, val color: Color) {
-    Food("Food", CategoryFood),
-    Nature("Nature", CategoryNature),
-    Culture("Culture", CategoryCulture),
-    Viewpoints("Viewpoints", CategoryViewpoints),
-    HiddenGem("Hidden gem", CategoryHiddenGem),
+/** [icon] is what the category draws in the centre of its map pin — see [MapPin]. */
+enum class PlaceCategory(val label: String, val color: Color, val icon: ImageVector) {
+    Food("Food", CategoryFood, Icons.Rounded.Restaurant),
+    Nature("Nature", CategoryNature, Icons.Rounded.Park),
+    Culture("Culture", CategoryCulture, Icons.Rounded.AccountBalance),
+    Viewpoints("Viewpoints", CategoryViewpoints, Icons.Rounded.Visibility),
+    HiddenGem("Hidden gem", CategoryHiddenGem, Icons.Rounded.Diamond),
 }
 
 data class ReviewTheme(val label: String, val count: Int)
@@ -25,11 +33,19 @@ data class Place(
     val ratingCount: Int,
     val detourMinutes: Int,
     val distanceKm: Double,
-    val openUntil: String,
-    val highlight: String,
-    val aiSummary: String,
-    val tags: List<String>,
-    val reviewThemes: List<ReviewTheme>,
+    /** Where the place actually is. The real map pins by these. */
+    val latitude: Double = 0.0,
+    val longitude: Double = 0.0,
+    /**
+     * Fields below come from `/places/{id}` only — a place built from a suggestion list has
+     * them blank until the detail screen fetches it.
+     */
+    val openUntil: String = "",
+    val highlight: String = "",
+    val aiSummary: String = "",
+    val tags: List<String> = emptyList(),
+    val reviewThemes: List<ReviewTheme> = emptyList(),
+    val photoCount: Int = 0,
     /** Normalised position on the stylised map, 0f..1f. */
     val mapX: Float,
     val mapY: Float,
@@ -43,9 +59,10 @@ enum class Units(val label: String) {
 }
 
 object Route {
+    // Kept for previews only — at runtime the drive comes from the search screen and the
+    // departure from the phone's clock.
     const val ORIGIN = "Alfama, Lisbon"
     const val DESTINATION = "Sintra"
-    const val DEPARTURE_MINUTES = 9 * 60 + 30
     const val DRIVE_MINUTES = 52
     const val DISTANCE_KM = 28
 
@@ -59,6 +76,10 @@ object Route {
     }
 }
 
+/**
+ * A fixed set of places along the Alfama → Sintra drive, kept for `@Preview` composables and
+ * nothing else. At runtime the app draws its places from `/routes/suggestions`.
+ */
 val SAMPLE_PLACES = listOf(
     Place(
         id = "sacolinha",
@@ -68,6 +89,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 312,
         detourMinutes = 6,
         distanceKm = 1.8,
+        latitude = 38.757,
+        longitude = -9.22,
         openUntil = "19:00",
         highlight = "The custard tarts come out of the oven at 10:00 and sell out by noon.",
         aiSummary = "Reviewers keep coming back for the pastéis de nata straight from the oven, " +
@@ -90,6 +113,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 1841,
         detourMinutes = 14,
         distanceKm = 2.6,
+        latitude = 38.7503,
+        longitude = -9.2586,
         openUntil = "18:00",
         highlight = "A rococo summer palace with formal gardens you can walk in 30 minutes.",
         aiSummary = "Visitors describe the tiled canal and the throne room as the two things " +
@@ -112,6 +137,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 2204,
         detourMinutes = 9,
         distanceKm = 3.1,
+        latitude = 38.7075,
+        longitude = -9.2822,
         openUntil = "20:00",
         highlight = "Twenty sculptures of Portuguese poets scattered across open lawns.",
         aiSummary = "People treat this as a leg-stretch stop: flat paths, shade in the upper " +
@@ -134,6 +161,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 428,
         detourMinutes = 12,
         distanceKm = 2.2,
+        latitude = 38.77,
+        longitude = -9.305,
         openUntil = "14:00",
         highlight = "A working produce market where the fish stalls close first, around 13:00.",
         aiSummary = "Regulars say the cheese and cured meat counters at the back are the reason " +
@@ -156,6 +185,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 96,
         detourMinutes = 21,
         distanceKm = 5.0,
+        latitude = 38.793,
+        longitude = -9.383,
         openUntil = "22:00",
         highlight = "A tiled spring fountain on a lane most people drive straight past.",
         aiSummary = "The few reviews agree on the same thing: it takes five minutes, the lane " +
@@ -178,6 +209,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 1207,
         detourMinutes = 34,
         distanceKm = 9.2,
+        latitude = 38.7847,
+        longitude = -9.4278,
         openUntil = "18:30",
         highlight = "Cork-lined monk cells built into the rock of the Sintra hills.",
         aiSummary = "Almost every review mentions the cork-lined cells and how low the doorways " +
@@ -200,6 +233,8 @@ val SAMPLE_PLACES = listOf(
         ratingCount = 486,
         detourMinutes = 43,
         distanceKm = 12.6,
+        latitude = 38.7822,
+        longitude = -9.4561,
         openUntil = "20:30",
         highlight = "On a clear afternoon you can see Cabo da Roca and the whole coastline.",
         aiSummary = "Reviewers say the view reaches Cabo da Roca when the sea fog lifts, and " +
@@ -216,9 +251,8 @@ val SAMPLE_PLACES = listOf(
     ),
 )
 
+/** Previews only — at runtime places come from the API. */
 fun placeById(id: String): Place = SAMPLE_PLACES.first { it.id == id }
-
-fun placeOrNull(id: String?): Place? = SAMPLE_PLACES.firstOrNull { it.id == id }
 
 /** 570 → "09:30" */
 fun formatClock(minutesFromMidnight: Int): String {
@@ -237,24 +271,6 @@ fun formatDistance(km: Int, units: Units): String = when (units) {
     Units.Kilometres -> "$km km"
     Units.Miles -> "${(km * 0.621371).toInt()} mi"
 }
-
-/** Stops always run in the order they are met along the drive. */
-fun stopsInRouteOrder(ids: Collection<String>): List<Place> =
-    SAMPLE_PLACES.filter { it.id in ids }.sortedBy { it.routeProgress }
-
-fun totalDetourMinutes(ids: Collection<String>): Int =
-    stopsInRouteOrder(ids).sumOf { it.detourMinutes }
-
-/** Clock time you reach a stop: drive time to it, plus every detour taken before it. */
-fun etaForStop(ids: Collection<String>, place: Place): Int {
-    val ordered = stopsInRouteOrder(ids)
-    val detoursBefore = ordered.takeWhile { it.id != place.id }.sumOf { it.detourMinutes }
-    val driveSoFar = (Route.DRIVE_MINUTES * place.routeProgress).toInt()
-    return Route.DEPARTURE_MINUTES + driveSoFar + detoursBefore
-}
-
-fun arrivalMinutes(ids: Collection<String>): Int =
-    Route.DEPARTURE_MINUTES + Route.DRIVE_MINUTES + totalDetourMinutes(ids)
 
 val INTERESTS = listOf(
     "Coffee",

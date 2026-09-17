@@ -24,8 +24,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Wayside"
 include(":app")
-includeBuild("/Users/bojanaandonova/Projects/InfrastructureLibrary") {
-    dependencySubstitution {
-        substitute(module("cc.android:infra-library")).using(project(":"))
-    }
-}
+
+// A local working copy of the infrastructure library, included as a module (not includeBuild)
+// so it shares this build's AGP, Kotlin and version catalog — two AGP versions in one build is
+// an error. Not committed; see .gitignore.
+include(":InfrastructureLibrary")

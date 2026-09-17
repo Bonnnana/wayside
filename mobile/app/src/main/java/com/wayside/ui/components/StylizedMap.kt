@@ -25,6 +25,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.hypot
 import com.wayside.ui.theme.LocalWaysideColors
 import com.wayside.ui.theme.PlusJakartaSans
 
@@ -136,6 +137,39 @@ private fun smoothPath(points: List<Offset>, size: Size): Path = Path().apply {
 }
 
 fun routePath(size: Size): Path = smoothPath(ROUTE_POINTS, size)
+
+/**
+ * Where a place sits on the drawn route, in normalised map space, given how far along the
+ * drive it is. Returns the point plus the unit normal there, so a place that is some distance
+ * off the road can be pushed to one side of the line instead of sitting on top of it.
+ *
+ * Places arrive from the API as latitude/longitude, but this map is a drawing, not a
+ * projection — pinning by real coordinates would scatter them off the road it draws.
+ */
+fun routeAnchorAt(progress: Float): Pair<Offset, Offset> {
+    val fallback = ROUTE_POINTS.last() to Offset(0f, -1f)
+    if (ROUTE_POINTS.size < 2) return fallback
+
+    val lengths = ROUTE_POINTS.zipWithNext { a, b -> hypot(b.x - a.x, b.y - a.y) }
+    val total = lengths.sum()
+    if (total <= 0f) return fallback
+
+    var remaining = progress.coerceIn(0f, 1f) * total
+    for (i in lengths.indices) {
+        val length = lengths[i]
+        if (remaining > length && i != lengths.lastIndex) {
+            remaining -= length
+            continue
+        }
+        val a = ROUTE_POINTS[i]
+        val b = ROUTE_POINTS[i + 1]
+        val t = if (length <= 0f) 0f else (remaining / length).coerceIn(0f, 1f)
+        val point = Offset(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t)
+        val normal = Offset(-(b.y - a.y) / length, (b.x - a.x) / length)
+        return point to normal
+    }
+    return fallback
+}
 
 /**
  * The stylised map every map-bearing screen sits on. Nothing here talks to a map SDK —

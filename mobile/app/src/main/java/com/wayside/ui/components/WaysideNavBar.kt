@@ -1,7 +1,6 @@
 package com.wayside.ui.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.AltRoute
 import androidx.compose.material.icons.rounded.Bookmarks
 import androidx.compose.material.icons.rounded.Explore
 import androidx.compose.material.icons.rounded.Person
@@ -15,7 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import com.wayside.ui.navigation.WaysideDestination
+import com.wayside.navigation.AppNavigationRoute
 import com.wayside.ui.theme.LocalWaysideColors
 
 private data class NavItem(
@@ -24,11 +23,12 @@ private data class NavItem(
     val icon: ImageVector,
 )
 
+// Matches the three tabs in the Detour design: Discover, Saved, Profile. Route is reached
+// from the "Plan a detour" CTA on Home rather than living in the bar itself.
 private val NAV_ITEMS = listOf(
-    NavItem(WaysideDestination.HOME, "Explore", Icons.Rounded.Explore),
-    NavItem(WaysideDestination.ROUTE, "Route", Icons.AutoMirrored.Rounded.AltRoute),
-    NavItem(WaysideDestination.SAVED, "Saved", Icons.Rounded.Bookmarks),
-    NavItem(WaysideDestination.PROFILE, "Profile", Icons.Rounded.Person),
+    NavItem(AppNavigationRoute.Home.route, "Discover", Icons.Rounded.Explore),
+    NavItem(AppNavigationRoute.Saved.route, "Saved", Icons.Rounded.Bookmarks),
+    NavItem(AppNavigationRoute.Profile.route, "Profile", Icons.Rounded.Person),
 )
 
 @Composable

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bookmark
+import androidx.compose.material.icons.rounded.Place
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -32,13 +34,16 @@ import com.wayside.ui.theme.WaysideMotion
 /**
  * Teardrop map pin in the category colour.
  *
- * Default: white centre dot. Saved: bookmark glyph. Selected: 3dp primary ring and
- * a slightly larger footprint, so the tapped pin reads at a glance.
+ * Default: the place's category glyph (fork-and-knife for food, a tree for nature, and so on —
+ * see [com.wayside.data.PlaceCategory.icon]). Saved: bookmark glyph, taking over the same slot.
+ * Selected: 3dp primary ring and a slightly larger footprint, so the tapped pin reads at a
+ * glance.
  */
 @Composable
 fun MapPin(
     color: Color,
     modifier: Modifier = Modifier,
+    icon: ImageVector = Icons.Rounded.Place,
     selected: Boolean = false,
     saved: Boolean = false,
     width: Dp = 30.dp,
@@ -101,24 +106,15 @@ fun MapPin(
                 close()
             }
             drawPath(innerTeardrop, color = color)
-            if (!saved) {
-                drawCircle(
-                    color = scheme.surface,
-                    radius = w * 0.16f,
-                    center = Offset(r, r),
-                )
-            }
         }
-        if (saved) {
-            Icon(
-                Icons.Rounded.Bookmark,
-                contentDescription = null,
-                tint = scheme.surface,
-                modifier = Modifier
-                    .size(width * 0.44f)
-                    .offset(y = width * 0.28f),
-            )
-        }
+        Icon(
+            imageVector = if (saved) Icons.Rounded.Bookmark else icon,
+            contentDescription = null,
+            tint = scheme.surface,
+            modifier = Modifier
+                .size(width * 0.44f)
+                .offset(y = width * 0.28f),
+        )
     }
 }
 

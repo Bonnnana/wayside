@@ -52,6 +52,8 @@ fun PlaceCard(
     added: Boolean,
     onClick: () -> Unit,
     onToggleAdd: () -> Unit,
+    /** Builds a real photo's URL. A place with no photos never calls it — see [PlacePhotoPager]. */
+    photoUrl: (String, Int) -> String,
     modifier: Modifier = Modifier,
     ringed: Boolean = false,
     width: Dp = 250.dp,
@@ -77,9 +79,12 @@ fun PlaceCard(
             .clickable(interactionSource = interaction, indication = null, onClick = onClick),
     ) {
         Box {
-            PlaceholderImage(
-                color = place.category.color,
-                seed = place.name.length,
+            PlacePhotoPager(
+                placeId = place.id,
+                photoCount = place.photoCount,
+                photoUrl = photoUrl,
+                placeholderColor = place.category.color,
+                placeholderSeed = place.name.length,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(112.dp),
@@ -127,6 +132,8 @@ fun SavedPlaceCard(
     detourLabel: String,
     onClick: () -> Unit,
     onUnsave: () -> Unit,
+    /** Builds a real photo's URL. A place with no photos never calls it — see [PlacePhotoPager]. */
+    photoUrl: (String, Int) -> String,
     modifier: Modifier = Modifier,
 ) {
     val wayside = LocalWaysideColors.current
@@ -142,9 +149,12 @@ fun SavedPlaceCard(
             .clickable(interactionSource = interaction, indication = null, onClick = onClick),
     ) {
         Box {
-            PlaceholderImage(
-                color = place.category.color,
-                seed = place.name.length,
+            PlacePhotoPager(
+                placeId = place.id,
+                photoCount = place.photoCount,
+                photoUrl = photoUrl,
+                placeholderColor = place.category.color,
+                placeholderSeed = place.name.length,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(96.dp),
